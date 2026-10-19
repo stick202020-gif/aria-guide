@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>오늘은 어떤 날인가요? - 아리아 맞춤 예약 가이드 (시연용 프로토타입)</title>
+  <meta name="description" content="웨스틴 조선 서울 아리아 맞춤 예약 가이드 시연용 프로토타입입니다. 표시된 정보는 모두 예시입니다." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="notice">시연용 프로토타입 · 모든 정보는 예시입니다</div>
+      <main id="screen" class="screen" aria-live="polite"></main>
+      <div id="toast" class="toast" role="status"></div>
+    </div>
+    <button class="restart" id="restart" type="button">처음부터 다시 시연</button>
+  </div>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
