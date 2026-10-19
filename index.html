@@ -1,24 +1,608 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>오늘은 어떤 날인가요? - 아리아 맞춤 예약 가이드 (시연용 프로토타입)</title>
-  <meta name="description" content="웨스틴 조선 서울 아리아 맞춤 예약 가이드 시연용 프로토타입입니다. 표시된 정보는 모두 예시입니다." />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>오늘은 어떤 날인가요? | aria 맞춤 가이드</title>
+<meta name="description" content="웨스틴 조선 서울 아리아 맞춤 예약 가이드 (KNDA 고객경험 워크숍 프로토타입)" />
+<meta property="og:title" content="오늘은 어떤 날인가요? | aria 맞춤 가이드" />
+<meta property="og:description" content="세 가지만 알려주시면, 그날에 필요한 아리아 안내만 모아드릴게요." />
+<meta property="og:image" content="img-hall.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+:root{
+  --cream:#F9F5F2; --paper:#FFFDFB; --sand:#E8D8CC; --sand2:#D8C6B5;
+  --espresso:#16110F; --ink:#2A221D; --muted:#7A6A5D; --line:#E6DAD0;
+  --caramel:#936635; --travertine:#B0946C; --red:#A3302A;
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#EFE7E0}
+body{font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+img{display:block;max-width:100%}
+.app{max-width:440px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;overflow:hidden;box-shadow:0 0 40px rgba(22,17,15,.08)}
+.serif{font-family:"Noto Serif KR",serif}
+.wordmark{font-family:"Playfair Display",serif;font-weight:500;letter-spacing:.02em}
+.screen{display:none;min-height:100vh;animation:fade .45s ease}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* landing */
+.land{position:relative;min-height:100vh;color:#fff;display:flex;flex-direction:column}
+.land .bg{position:absolute;inset:0;background:url(img-hall.jpg) center/cover no-repeat}
+.land .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,17,15,.55) 0%,rgba(22,17,15,.25) 35%,rgba(22,17,15,.85) 72%,#16110F 100%)}
+.land .top{position:relative;padding:22px 24px;display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.85}
+.land .body{position:relative;margin-top:auto;padding:0 26px 34px}
+.land .logo{font-size:64px;line-height:1;margin-bottom:6px}
+.land .sub{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--sand);margin-bottom:28px}
+.land h1{font-size:28px;font-weight:600;line-height:1.35;margin-bottom:12px}
+.land p{font-size:15px;color:#E9DED5;margin-bottom:28px}
+.keys{display:flex;gap:6px;margin-bottom:26px}
+.keys span{height:22px;flex:1;border-radius:3px;background:rgba(255,255,255,.12)}
+.keys span:nth-child(2n){background:rgba(176,148,108,.45);flex:.6}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:56px;border-radius:999px;font-weight:600;font-size:16px;transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.btn.gold{background:var(--travertine);color:var(--espresso)}
+.btn.dark{background:var(--espresso);color:#fff}
+.btn.line{border:1px solid var(--sand2);color:var(--ink);background:var(--paper)}
+.meta{margin-top:14px;font-size:12px;color:#BFAFA2;text-align:center}
+
+/* questions */
+.qwrap{padding:22px 22px 30px;min-height:100vh;display:flex;flex-direction:column}
+.qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+.back{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--paper)}
+.prog{display:flex;gap:6px}
+.prog i{width:28px;height:4px;border-radius:2px;background:var(--line)}
+.prog i.on{background:var(--caramel)}
+.qnum{font-family:"Playfair Display",serif;font-style:italic;color:var(--caramel);font-size:15px;margin-bottom:6px}
+.qtitle{font-size:26px;font-weight:600;line-height:1.35;margin-bottom:8px}
+.qsub{color:var(--muted);font-size:14px;margin-bottom:24px}
+.opts{display:grid;gap:12px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;padding:16px 16px;border-radius:var(--radius);background:var(--paper);border:1px solid var(--line);transition:all .18s}
+.opt:hover{border-color:var(--travertine)}
+.opt.sel{border-color:var(--caramel);background:#FBF3EB;box-shadow:0 0 0 1px var(--caramel) inset}
+.opt .ic{width:46px;height:46px;flex:none;border-radius:14px;background:var(--cream);display:grid;place-items:center;font-size:22px}
+.opt b{display:block;font-size:16px;font-weight:600}
+.opt small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.qfoot{margin-top:auto;padding-top:24px;font-size:12px;color:var(--muted);text-align:center}
+
+/* result */
+.rhero{position:relative;color:#fff;padding:22px 22px 26px;background:var(--espresso);overflow:hidden}
+.rhero .ph{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.42}
+.rhero .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,17,15,.2),#16110F 92%)}
+.rhero .in{position:relative}
+.rtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}
+.rtop .wordmark{font-size:28px}
+.redo{font-size:12px;padding:7px 12px;border:1px solid rgba(255,255,255,.35);border-radius:999px;color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{font-size:12px;padding:5px 10px;border-radius:999px;background:rgba(176,148,108,.25);color:#F3E7DC;border:1px solid rgba(176,148,108,.5)}
+.rhero h2{font-size:24px;line-height:1.38;font-weight:600;margin-bottom:8px}
+.rhero p{font-size:14px;color:#D9CCC1}
+
+.nav{position:sticky;top:0;z-index:5;background:rgba(249,245,242,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex:none;font-size:13px;text-decoration:none;padding:7px 12px;border-radius:999px;background:var(--paper);border:1px solid var(--line);color:var(--ink)}
+.nav a.on{background:var(--espresso);color:#fff;border-color:var(--espresso)}
+
+.sec{padding:26px 18px 6px;scroll-margin-top:56px}
+.sec-h{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.sec-h .n{font-family:"Playfair Display",serif;font-style:italic;color:var(--caramel);font-size:15px}
+.sec-h h3{font-size:20px;font-weight:600}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+.card.dark{background:var(--espresso);color:#F3EAE2;border-color:var(--espresso)}
+.card.dark .muted{color:#BFAFA2}
+.card h4{font-size:16px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card p,.card li{font-size:14px}
+.card ul{list-style:none;display:grid;gap:9px}
+.card li{position:relative;padding-left:14px}
+.card li::before{content:"";position:absolute;left:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--travertine)}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.pic{border-radius:14px;overflow:hidden;margin:-4px 0 14px;aspect-ratio:16/9;background:var(--sand)}
+.pic img{width:100%;height:100%;object-fit:cover}
+.cap{font-size:11px;color:var(--muted);margin:-8px 0 14px}
+.src{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:6px;vertical-align:2px;margin-left:4px;white-space:nowrap}
+.src.o{background:#EFE3D3;color:#7A5426}
+.src.c{background:#FCE9DE;color:#B4501F}
+.src.v{background:#E3F3E6;color:#22783A}
+.src.r{background:#EAE6F4;color:#5A4A8C}
+.src.d{background:rgba(255,255,255,.14);color:#F3E7DC}
+
+.glance{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.glance div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px}
+.glance div.w{grid-column:1/-1}
+.glance small{display:block;font-size:11px;letter-spacing:.06em;color:#BFAFA2;margin-bottom:4px}
+.glance b{font-size:15px;font-weight:600;line-height:1.4;display:block}
+.glance em{font-style:normal;font-size:12px;color:#D9CCC1;display:block;margin-top:3px}
+
+table.price{width:100%;border-collapse:collapse;font-size:14px}
+table.price th,table.price td{padding:9px 4px;border-bottom:1px solid var(--line);text-align:left}
+table.price th{font-weight:500;color:var(--muted);font-size:12px}
+table.price td.r{text-align:right;font-variant-numeric:tabular-nums}
+table.price td.hl{color:var(--red);font-weight:600}
+table.price tr.mine td{background:#FBF3EB}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--red);color:#fff}
+.tag.g{background:var(--caramel)}
+.tip{display:flex;gap:12px;padding:14px;border-radius:14px;background:#FBF3EB;border:1px dashed var(--travertine);margin-bottom:10px}
+.tip .q{flex:none;width:30px;height:30px;border-radius:50%;background:var(--caramel);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.tip p{font-size:14px}
+.tip b{display:block;font-size:14px;margin-bottom:2px}
+.steps{counter-reset:s;display:grid;gap:8px}
+.steps li{counter-increment:s;padding-left:30px}
+.steps li::before{content:counter(s);background:var(--espresso);color:#fff;width:20px;height:20px;border-radius:50%;top:.15em;font-size:11px;display:grid;place-items:center;font-weight:600}
+.hide{display:none!important}
+
+.cta{padding:26px 18px 20px}
+.cta .card{padding:20px}
+.cta .btn{margin-top:10px}
+.cta .btn small{font-weight:400;font-size:12px;opacity:.8}
+.foot{padding:10px 22px 40px;font-size:11.5px;color:var(--muted);line-height:1.7}
+.foot b{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--espresso);color:#fff;font-size:13px;padding:10px 16px;border-radius:999px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+</style>
 </head>
 <body>
-  <div class="stage">
-    <div class="phone" id="phone">
-      <div class="notice">시연용 프로토타입 · 모든 정보는 예시입니다</div>
-      <main id="screen" class="screen" aria-live="polite"></main>
-      <div id="toast" class="toast" role="status"></div>
+<div class="app">
+
+  <!-- 0. 랜딩 -->
+  <section class="screen on" id="s-land">
+    <div class="land">
+      <div class="bg" role="img" aria-label="아리아 홀 전경"></div>
+      <div class="top"><span>The Westin Josun Seoul</span><span>Since 1914</span></div>
+      <div class="body">
+        <div class="logo wordmark">aria</div>
+        <div class="sub">Symphony of Flavors · 세계 미식의 하모니</div>
+        <h1 class="serif">오늘은<br />어떤 날인가요?</h1>
+        <p>세 가지만 알려주시면, 그날에 꼭 필요한<br />아리아 안내만 한 장에 모아드릴게요.</p>
+        <div class="keys" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <button class="btn gold" id="start">맞춤 가이드 시작하기 →</button>
+        <div class="meta">질문 3개 · 약 20초 · 개인정보를 묻지 않아요</div>
+      </div>
     </div>
-    <button class="restart" id="restart" type="button">처음부터 다시 시연</button>
+  </section>
+
+  <!-- 1~3. 질문 -->
+  <section class="screen" id="s-q">
+    <div class="qwrap">
+      <div class="qhead">
+        <button class="back" id="qback" aria-label="이전">←</button>
+        <div class="prog" id="prog"><i></i><i></i><i></i></div>
+        <span class="wordmark" style="font-size:20px">aria</span>
+      </div>
+      <div id="qbody"></div>
+      <div class="qfoot">답변은 가이드를 만드는 데만 쓰이고 저장되지 않아요.</div>
+    </div>
+  </section>
+
+  <!-- 4. 결과 -->
+  <section class="screen" id="s-r">
+    <div class="rhero">
+      <div class="ph" id="rph"></div>
+      <div class="in">
+        <div class="rtop"><span class="wordmark">aria</span><button class="redo" id="redo">답변 바꾸기</button></div>
+        <div class="chips" id="rchips"></div>
+        <h2 class="serif" id="rtitle"></h2>
+        <p id="rlead"></p>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#g0">한눈에</a><a href="#g1">할인 혜택</a><a href="#g2">시즌 메뉴</a><a href="#g3">오시는 길</a><a href="#g4">추가 제안</a><a href="#g5">예약 전 체크</a><a href="#g6">예약하기</a>
+    </nav>
+    <div id="rbody"></div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* =========================================================
+   정보 확인일: 2026-10-19
+   출처 배지: 공식(조선호텔 공식 아리아 예약 페이지·이벤트 페이지) / 캐치테이블 / 네이버(플레이스·예약) / 후기(팀 리뷰 분석)
+   ========================================================= */
+const TODAY = new Date();
+const OCT_PROMO_END = new Date('2026-10-30T23:59:59+09:00');
+const promoOn = TODAY <= OCT_PROMO_END;
+
+const S = { o:'<span class="src o">공식</span>', c:'<span class="src c">캐치테이블</span>', v:'<span class="src v">네이버</span>', r:(n)=>`<span class="src r">후기${n?' '+n:''}</span>` };
+
+const LINKS = {
+  catch:'https://app.catchtable.co.kr/ct/shop/aria',
+  naver:'https://booking.naver.com/booking/6/bizes/87983',
+  official:'https://www.josunhotel.com/resve/dining/step0.do',
+  tel:'tel:02-317-0357',
+  map:'https://map.naver.com/p/entry/place/11714851',
+  deli:'https://booking.naver.com/booking/6/bizes/535356',
+  pkg:'https://www.josunhotel.com/package/get.do?packageId=234&propertyId=2',
+  autumn:'https://www.josunhotel.com/event/get.do?eventSn=2788690',
+  club:'https://www.josunhotel.com/membership/ed2_product.do'
+};
+
+const Q = [
+  { id:'day', n:'01', title:'오늘은 어떤 날인가요?', sub:'날에 맞는 준비물과 혜택을 먼저 보여드릴게요.', opts:[
+    {v:'anniv', ic:'💍', t:'결혼·연애 기념일', d:'결혼기념일, 100일, 프러포즈'},
+    {v:'bday', ic:'🎂', t:'생일', d:'연인, 친구, 나의 생일'},
+    {v:'parents', ic:'🌸', t:'부모님 생신·환갑·칠순', d:'어른을 모시는 날'},
+    {v:'gather', ic:'🥂', t:'가족·지인 모임', d:'특별한 날은 아니지만 좋은 한 끼'}
+  ]},
+  { id:'who', n:'02', title:'누구와 오시나요?', sub:'함께 오는 분에 따라 좌석과 시간 팁이 달라져요.', opts:[
+    {v:'couple', ic:'👫', t:'연인·배우자와 둘이', d:'2인'},
+    {v:'elders', ic:'👵', t:'부모님·어른과 함께', d:'3~8인 가족'},
+    {v:'kids', ic:'🧒', t:'아이와 함께', d:'유아·초등학생 동반'},
+    {v:'group', ic:'👥', t:'친구·지인 여럿', d:'3인 이상 (9인 이상 단체 포함)'}
+  ]},
+  { id:'go', n:'03', title:'어떻게 오시나요?', sub:'주차, 발렛, 지하철 중 내 방법에 맞춰 안내해요.', opts:[
+    {v:'car', ic:'🚗', t:'자가용 · 직접 주차', d:'호텔 지하주차장'},
+    {v:'valet', ic:'🔑', t:'자가용 · 발렛', d:'1층 로비 입구에서 맡기기'},
+    {v:'transit', ic:'🚇', t:'지하철·버스·택시', d:'시청역, 을지로입구역'}
+  ]}
+];
+
+const LABEL = {
+  day:{anniv:'기념일',bday:'생일',parents:'부모님 기념일',gather:'모임'},
+  who:{couple:'둘이서',elders:'어른과 함께',kids:'아이와 함께',group:'여럿이'},
+  go:{car:'직접 주차',valet:'발렛',transit:'대중교통'}
+};
+
+let A = {}; let qi = 0;
+const $ = (s)=>document.querySelector(s);
+function show(id){ document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('on', e.id===id)); window.scrollTo(0,0); }
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),1800); }
+
+function renderQ(){
+  const q = Q[qi];
+  document.querySelectorAll('#prog i').forEach((e,i)=>e.classList.toggle('on', i<=qi));
+  $('#qbody').innerHTML = `
+    <div class="qnum">Question ${q.n} / 03</div>
+    <h2 class="qtitle serif">${q.title}</h2>
+    <p class="qsub">${q.sub}</p>
+    <div class="opts">${q.opts.map(o=>`
+      <button class="opt ${A[q.id]===o.v?'sel':''}" data-v="${o.v}">
+        <span class="ic">${o.ic}</span><span><b>${o.t}</b><small>${o.d}</small></span>
+      </button>`).join('')}</div>`;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    A[q.id]=b.dataset.v; b.classList.add('sel');
+    setTimeout(()=>{ if(qi<Q.length-1){ qi++; renderQ(); window.scrollTo(0,0);} else { renderResult(); } },220);
+  });
+}
+
+/* ---------- 결과 조립 ---------- */
+function won(n){ return n.toLocaleString('ko-KR')+'원'; }
+
+function titleFor(a){
+  const t = {
+    anniv:{couple:'두 분의 기념일을 위한<br>아리아 가이드', elders:'가족과 함께하는 기념일,<br>아리아 가이드', kids:'아이와 함께하는 기념일,<br>아리아 가이드', group:'함께 축하하는 기념일,<br>아리아 가이드'},
+    bday:{couple:'둘만의 생일 저녁을 위한<br>아리아 가이드', elders:'어른과 함께하는 생일,<br>아리아 가이드', kids:'아이와 함께하는 생일 파티,<br>아리아 가이드', group:'다 함께 축하하는 생일,<br>아리아 가이드'},
+    parents:{couple:'부모님 두 분을 모시는 날,<br>아리아 가이드', elders:'부모님을 모시는 특별한 날,<br>아리아 가이드', kids:'삼대가 함께하는 잔칫날,<br>아리아 가이드', group:'온 가족이 모이는 잔칫날,<br>아리아 가이드'},
+    gather:{couple:'둘이 즐기는 미식의 하루,<br>아리아 가이드', elders:'가족 식사를 위한<br>아리아 가이드', kids:'아이와 함께하는 주말 한 끼,<br>아리아 가이드', group:'모임을 위한<br>아리아 가이드'}
+  };
+  return t[a.day][a.who];
+}
+
+function bestTime(a){
+  if(a.who==='kids') return {t:'평일 점심 또는 주말 1부 점심', d:'점심 11:30부터 · 아이 식사 리듬에 맞추기 쉬워요', why:'36개월 이하는 무료, 37개월~초등학생은 85,000원이에요.'};
+  if(a.day==='parents' || a.who==='elders') return {t:'평일 점심 (11:30~14:30)', d:'성인 170,000원 · 1·2부 구분 없이 3시간', why:'가장 합리적인 가격대이고, 주말 2부제처럼 시간에 쫓기지 않아요.'};
+  if(a.who==='group') return {t:'월~목 저녁 (17:30~21:30)', d:'1·2부 구분 없이 여유 있게 · 6인 이상은 별실 고려', why:'모임은 대화 시간이 길어서 2부제가 없는 시간대가 좋아요.'};
+  return {t:'월~목 저녁 (17:30~21:30)', d:'1·2부 구분 없이 여유롭게 · 성인 195,000원', why:'"2시간은 짧았다"는 후기가 많아요. 월~목 저녁은 2부제가 없어요.'};
+}
+
+function sectionGlance(a){
+  const b = bestTime(a);
+  const go = {car:'지하주차장 · 점심 3시간/저녁 4시간 무료', valet:'1층 로비 입구 발렛 · 30,000원', transit:'시청역·을지로입구역 도보 5분'}[a.go];
+  const deal = promoOn ? (a.who==='kids' ? '10월 사전결제 10~15% (성인만)' : '10월 사전결제 최대 15% 할인') : '최신 혜택은 예약 채널에서 확인';
+  return `
+  <div class="sec" id="g0">
+    <div class="card dark">
+      <h4 style="color:#fff">한눈에 보기 <span class="src d">맞춤 요약</span></h4>
+      <div class="glance">
+        <div class="w"><small>추천 방문 시간</small><b>${b.t}</b><em>${b.d}</em></div>
+        <div><small>이번 달 혜택</small><b>${deal}</b></div>
+        <div><small>오시는 방법</small><b>${go}</b></div>
+        <div class="w"><small>왜 이 시간인가요?</small><b style="font-weight:500;font-size:14px">${b.why}</b></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function sectionDiscount(a){
+  const mineLunch = (a.day==='parents'||a.who==='elders'||a.who==='kids');
+  const rows = [
+    ['평일 점심', 170000, promoOn?153000:null, '10%', mineLunch],
+    ['평일 저녁', 195000, promoOn?175500:null, '10%', !mineLunch && a.who!=='kids'],
+    ['주말·공휴일 (1·2부)', 195000, null, '', false],
+    ['일요일 저녁 2부', 195000, promoOn?165750:null, '15%', false]
+  ];
+  const promoCard = promoOn ? `
+    <div class="card">
+      <h4><span class="tag">10월 한정</span> 온라인 사전결제 할인 ${S.c}${S.v}</h4>
+      <p class="muted small" style="margin-bottom:10px">이용 10/4~10/30 (10/9 제외) · 2~8인 · 캐치테이블·네이버 예약에서 결제</p>
+      <table class="price">
+        <tr><th>시간대 (성인 1인)</th><th class="r" style="text-align:right">정가</th><th style="text-align:right">할인가</th></tr>
+        ${rows.map(r=>`<tr class="${r[4]?'mine':''}"><td>${r[0]}${r[4]?' <span class="tag g">추천</span>':''}</td><td class="r">${won(r[1])}</td><td class="r ${r[2]?'hl':''}">${r[2]?won(r[2])+' <small>('+r[3]+')</small>':'-'}</td></tr>`).join('')}
+      </table>
+      <p class="muted small" style="margin-top:10px">사전결제 상품은 이용 후 결제수단 변경·취소가 안 되고, 다른 할인(멤버십·쿠폰·식사권)과 함께 쓸 수 없어요.${a.who==='kids'?' 어린이 요금(85,000원)은 할인 대상이 아니에요.':''}</p>
+    </div>` : `
+    <div class="card">
+      <h4>가격 안내 (10·11월) ${S.o}</h4>
+      <table class="price">${rows.map(r=>`<tr><td>${r[0]}</td><td class="r">${won(r[1])}</td></tr>`).join('')}</table>
+      <p class="muted small" style="margin-top:10px">10월 사전결제 프로모션은 종료됐어요. 새 혜택은 예약 채널에서 확인해 주세요.</p>
+    </div>`;
+
+  const kids = a.who==='kids' ? `
+    <div class="card"><h4>아이 요금 ${S.o}</h4><ul>
+      <li>36개월 이하: <b>무료</b> ${S.c}</li>
+      <li>37개월 ~ 12세(초등학생): 점심·저녁 85,000원, 아침 35,000원</li></ul></div>` : '';
+
+  const couplePkg = (a.who==='couple' && (a.day==='anniv'||a.day==='bday')) ? `
+    <div class="card">
+      <h4>하룻밤까지 함께라면 ${S.o}</h4>
+      <p>숙박 패키지 <b>2026 Everyday Special Aria</b>: 객실 1박 + 아리아 런치 또는 디너 2인 + 식음업장 10% 할인. 디럭스 871,200원부터.</p>
+      <p class="muted small" style="margin-top:6px">패키지 예약 기간 ~11/30, 숙박 ~12/31 · 아리아는 최소 1일 전 별도 예약 필요</p>
+    </div>` : '';
+
+  const gift = (a.day==='parents') ? `
+    <div class="card"><h4>선물로 드리고 싶다면 ${S.o}</h4><p>아리아 뷔페 1인·2인 식사권을 판매해요. 12월이나 갈라디너 같은 이벤트일에 쓰면 추가 요금이 생길 수 있어요.</p></div>` : '';
+
+  return `
+  <div class="sec" id="g1">
+    <div class="sec-h"><span class="n">01</span><h3>할인 혜택</h3></div>
+    ${promoCard}
+    ${kids}
+    <div class="card">
+      <h4>클럽조선 멤버십이 있다면 ${S.o}</h4>
+      <ul>
+        <li>VIP PREMIER 레스토랑 최대 15%, GOLD 이상 최대 20%</li>
+        <li>GOLD·PLATINUM 와인 콜키지 무료권 2매, BLACK 4매</li>
+        <li>멤버십과 제휴카드 할인은 중복 적용이 안 돼요</li>
+      </ul>
+    </div>
+    ${couplePkg}${gift}
+    <p class="muted small" style="padding:0 4px 4px">할인 공통 제외일: 5/5, 12/24, 12/25, 12/31 ${S.c} · 12월과 갈라디너 날에는 가격이 달라질 수 있어요 ${S.v}</p>
+  </div>`;
+}
+
+function sectionSeason(a){
+  const focus = {
+    couple:{t:'둘이라면 이 스테이션부터', l:['일식: 카이센동, 참치 뱃살과 연어알, 딱새우','그릴: 허브 버터 스테이크, 코코넛 크러스트 은대구','디저트: 피아노 건반 모티브 스페셜 케이크']},
+    elders:{t:'어른들이 좋아하실 스테이션', l:['한식 강화: 소갈비찜, 떡갈비, 전복선, 조선호텔 김치','중식: 송이 전복, XO 소스 볶음밥','디저트: 주악, 강정, 다식 같은 한식 디저트']},
+    kids:{t:'아이가 좋아할 스테이션', l:['디저트 스테이션 (중앙): 피아노·셰프복 모티브 케이크','파스타 라이브: 버섯 크림 파스타','식후 테이블로 가져다주는 시즌 빙수']},
+    group:{t:'여럿이 나눠 먹기 좋은 스테이션', l:['아시안: 수제 딤섬, 야키토리, 쿠시아게','인도: 화덕 난 3종과 커리','그릴: 탄두리 포크 립, 전어구이']}
+  }[a.who];
+  return `
+  <div class="sec" id="g2">
+    <div class="sec-h"><span class="n">02</span><h3>시즌 메뉴와 이벤트</h3></div>
+    <div class="card">
+      <div class="pic"><img src="img-autumn.jpg" alt="아리아 가을 그릴 스테이션" loading="lazy"></div>
+      <p class="cap">가을 메뉴 연출 컷 · 출처: 조선호텔앤리조트</p>
+      <h4><span class="tag g">9/8 ~ 11/30</span> 아리아 가을 메뉴 ${S.o}</h4>
+      <ul>
+        <li>그릴: 허브 버터 스테이크, 전어구이, 코코넛 크러스트 은대구</li>
+        <li>라이브: 아마트리치아나·버섯 크림 파스타, 송이 우동</li>
+        <li>중식·인도: 송이 전복, 마라우육, 양고기 감자 커리, 탄두리 포크 립</li>
+        <li>디저트: 밤 샌드 케이크, 애플 턴오버, 판나코타 3종</li>
+      </ul>
+      <p class="muted small" style="margin-top:8px">일부 메뉴는 바뀔 수 있어요.</p>
+    </div>
+    <div class="card">
+      <div class="pic"><img src="img-dessert.jpg" alt="아리아 디저트 스테이션" loading="lazy"></div>
+      <p class="cap">2026년 7월 리뉴얼 디저트 스테이션 · 출처: 웨스틴 조선 서울 제공 (신세계그룹 뉴스룸)</p>
+      <h4>${focus.t}</h4>
+      <ul>${focus.l.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>
+    <div class="card">
+      <h4>테이블로 찾아오는 서비스 ${S.o}</h4>
+      <ul>
+        <li>식전: 웰니스 주스 웰컴 드링크</li>
+        <li>식후: 계절마다 바뀌는 시즌 빙수 (10월 후기에는 <b>홍시빙수</b>) ${S.v}</li>
+        ${a.who==='kids'?`<li>아이에게는 망고주스 웰컴 드링크를 줬다는 후기가 있어요 ${S.v}</li>`:''}
+      </ul>
+    </div>
+    <p class="muted small" style="padding:0 4px 4px">2026년 크리스마스·연말 프로모션은 아직 공지 전이에요 (10/19 기준).</p>
+  </div>`;
+}
+
+function sectionWay(a){
+  const car = `
+    <div class="card">
+      <h4>직접 주차한다면 ${S.o}</h4>
+      <ul>
+        <li>아리아 이용 시 <b>점심 3시간 / 저녁 4시간 무료</b> 주차</li>
+        <li>주말·공휴일은 주차에 <b>평균 30분 이상</b> 걸린다고 호텔이 직접 안내해요</li>
+        <li>장애인 주차구역이 있어요 ${S.v}</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="q">!</span><p><b>지하주차장 진입로가 좁고 경사가 있어요</b>"주차장 들어가는 입구가 매우 좁음", "주차까지 하면 뷔페에 지각" 같은 후기가 반복돼요. 예약 시간보다 30분 일찍 도착하세요. ${S.r('주차 불편 12건')}</p></div>
+    ${a.who==='elders'||a.day==='parents'?`<div class="tip"><span class="q">i</span><p><b>어른과 함께라면</b>어른들은 1층 로비 입구에서 먼저 내려드리고, 주차는 따로 하는 걸 추천해요.</p></div>`:''}`;
+  const valet = `
+    <div class="card">
+      <h4>발렛을 이용한다면 ${S.c}${S.v}</h4>
+      <ul>
+        <li>웨스틴 조선 서울 <b>1층 로비 입구</b>에서 맡기면 돼요</li>
+        <li>요금 <b>30,000원</b></li>
+        <li>주말·공휴일에는 발렛이 잠시 제한될 수 있어요. 그때는 지하주차장을 이용하세요 (점심 3시간·저녁 4시간 무료 ${S.o})</li>
+        <li>클럽조선 PLATINUM은 발렛 이용권 6매, BLACK은 12매가 있어요 ${S.o}</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="q">✓</span><p><b>후기에서는 만족도가 높아요</b>"발렛 서비스가 편했다", "주차 서비스 감동" 같은 후기가 있어요. 칠순·환갑처럼 짐(꽃, 케이크)이 많은 날에 특히 좋아요. ${S.r()}</p></div>`;
+  const transit = `
+    <div class="card">
+      <h4>지하철로 오신다면 ${S.o}</h4>
+      <ol class="steps" style="list-style:none">
+        <li><b>시청역 (1호선)</b> 6번 출구 → 더 플라자 호텔에서 오른쪽 → 소공지하쇼핑센터 → 지하 10번 출구 왼쪽, <b>도보 5분</b></li>
+        <li><b>을지로입구역 (2호선)</b> 시티스타몰 4번 출구 → 데미타스커피 왼쪽 → 지하 10번 출구 왼쪽, <b>도보 5분</b></li>
+      </ol>
+      <p class="muted small" style="margin-top:10px">버스: 172·405·472번 서울광장 하차</p>
+    </div>
+    <div class="tip"><span class="q">✓</span><p><b>주말이라면 대중교통이 가장 빨라요</b>호텔도 주말·공휴일에는 대중교통 이용을 권장해요. 식사 후 서울광장, 덕수궁 돌담길 산책을 이어가기 좋아요.</p></div>`;
+  return `
+  <div class="sec" id="g3">
+    <div class="sec-h"><span class="n">03</span><h3>오시는 길</h3></div>
+    <div class="card">
+      <div class="pic" style="aspect-ratio:4/3"><img src="img-entrance.jpg" alt="아리아 입구 사인" loading="lazy" style="object-position:center 40%"></div>
+      <p class="cap">리뉴얼 후 아리아 입구 (2026.09 촬영, 팀 자료)</p>
+      <h4>웨스틴 조선 서울 저층 로비 (LL층) ${S.o}</h4>
+      <p>서울 중구 소공로 106 · 저층 로비에서 위 사진의 <b>aria</b> 사인을 찾으세요. 와인숍과 조선델리도 같은 저층 로비에 있어요.</p>
+      <a class="btn line" style="height:46px;margin-top:12px;font-size:14px" href="${LINKS.map}" target="_blank" rel="noopener">네이버 지도에서 보기</a>
+    </div>
+    ${a.go==='car'?car:a.go==='valet'?valet:transit}
+    <div class="tip"><span class="q">⏱</span><p><b>입구 줄은 5~10분 전 도착이면 충분해요</b>주말 1·2부는 정시에 입장해서 문 앞에 줄이 생기고, 따로 대기 공간이 없어 복도에 서서 기다려요. 너무 일찍 오기보다 5~10분 전에 맞춰 오세요. ${S.r('입구 대기 14건')}</p></div>
+  </div>`;
+}
+
+function sectionExtra(a){
+  const wine = `
+    <div class="card" data-k="wine">
+      <h4>🍷 와인 한 병 (콜키지) ${S.o}${S.c}</h4>
+      <ul>
+        <li>테이블당 <b>1병, 100,000원</b> (750ml 와인만, 국산 술 반입 불가)</li>
+        <li>같은 층 <b>와인숍</b>에서 1,000여 종 구매 가능 · 평일 10:00~20:00, 주말 11:00~20:00 · 02-317-0087</li>
+        <li>와인숍에서 산 와인은 콜키지가 무료였다는 후기가 여러 건 있어요. 방문 전에 꼭 확인하세요 ${S.r()}</li>
+        <li>클럽조선 GOLD 이상은 콜키지 무료권이 있어요 ${S.o}</li>
+      </ul>
+    </div>`;
+  const cake = `
+    <div class="card" data-k="cake">
+      <h4>🎂 케이크 ${S.o}</h4>
+      <ul>
+        <li>같은 층 <b>조선델리</b>에서 케이크를 살 수 있어요 · 07:00~21:00 · 02-317-0022 · <a href="${LINKS.deli}" target="_blank" rel="noopener">네이버 예약</a></li>
+        <li>케이크를 가져가면 직원이 받침대를 주고 촛불, 사진까지 도와줬다는 후기가 있어요 ${S.r()}</li>
+        <li>레터링은 공식 안내가 없어요. 조선델리에 미리 문의하세요</li>
+      </ul>
+    </div>`;
+  const flower = `
+    <div class="card" data-k="flower">
+      <h4>💐 꽃 ${S.r()}</h4>
+      <ul>
+        <li>호텔에서 꽃을 주문받는다는 공식 안내는 없어요. 직접 준비해 오는 경우가 대부분이에요</li>
+        <li>꽃다발을 보고 매니저가 먼저 기념사진을 찍어줬다는 후기가 있어요</li>
+        <li>꽃바구니는 브레이크 타임에 미리 맡기면 자리에 세팅해 줬다는 사례가 있어요 ${S.c}</li>
+      </ul>
+    </div>`;
+  const seat = `
+    <div class="card" data-k="seat">
+      <div class="pic"><img src="img-window.jpg" alt="아리아 창가 좌석" loading="lazy"></div>
+      <p class="cap">창가 좌석 · 출처: 캐치테이블 업체 사진</p>
+      <h4>🪟 창가 자리 요청 ${S.v}</h4>
+      <ul>
+        <li>공식적으로는 좌석 지정이 안 되고, <b>예약한 순서대로 안쪽부터</b> 배정돼요</li>
+        <li>그래도 예약 요청사항에 "${LABEL.day[a.day]}, 창가 희망"을 남겨 창가를 받았다는 후기가 많아요 ${S.r('창가 언급 84건')}</li>
+        <li>당일 예약은 창가를 못 받았다는 후기가 있어요. <b>예약이 열리는 날(매월 1일 9시)</b>에 빨리 잡을수록 유리해요</li>
+      </ul>
+    </div>`;
+  const kids = `
+    <div class="card" data-k="kids">
+      <h4>🧸 아이 준비물 ${S.c}</h4>
+      <ul>
+        <li>캐치테이블 편의시설에 <b>웰컴키즈존</b>으로 등록돼 있어요</li>
+        <li>요청사항에 "아기 동반"을 남기면 유아의자, 유아식기, 아기가위까지 미리 세팅해 줬다는 후기가 있어요 ${S.r()}</li>
+        <li>로비에 수유실이 있다는 후기도 있어요 ${S.r()}</li>
+      </ul>
+    </div>`;
+  const room = `
+    <div class="card" data-k="room">
+      <h4>🚪 별실(룸) ${S.o}${S.c}</h4>
+      <ul>
+        <li>별실 3개: 6~8인 2개, 8~10인 1개 · 룸 차지 <b>50,000원</b></li>
+        <li>최소 주문금액 6~8인 1,050,000원 / 8~10인 1,400,000원 (평일 저녁·주말 기준)</li>
+        <li>환갑·칠순 잔치를 룸에서 했다는 후기가 많아요 ${S.r()}</li>
+        <li>9인 이상 단체와 룸은 <b>전화 예약</b>만 돼요: 02-317-0357</li>
+      </ul>
+    </div>`;
+  let order;
+  if(a.who==='kids') order = [kids, cake, seat, ...(a.day==='parents'?[room]:[]), flower, wine];
+  else if(a.day==='parents' || a.who==='elders') order = [room, seat, flower, cake, wine];
+  else if(a.who==='group') order = [room, wine, cake, seat];
+  else if(a.day==='anniv') order = [wine, flower, cake, seat];
+  else if(a.day==='bday') order = [cake, flower, wine, seat];
+  else order = [seat, wine, cake];
+  return `
+  <div class="sec" id="g4">
+    <div class="sec-h"><span class="n">04</span><h3>추가 제안</h3></div>
+    <p class="muted small" style="margin:-6px 4px 12px">${LABEL.day[a.day]} · ${LABEL.who[a.who]}에 맞춰 필요한 순서대로 보여드려요.</p>
+    ${order.join('')}
+  </div>`;
+}
+
+function sectionCheck(a){
+  return `
+  <div class="sec" id="g5">
+    <div class="sec-h"><span class="n">05</span><h3>예약 전 체크</h3></div>
+    <div class="card">
+      <ul>
+        <li><b>예약 오픈</b>: 이용 한 달 전 1일 오전 9시 (12월 예약은 11월 1일 9시) ${S.o}</li>
+        <li><b>예약금</b>: 성인 1인 20,000원, 식사하면 전액 돌려받아요 ${S.o}</li>
+        <li><b>취소</b>: 2일 전 100% · 1일 전 50% · 당일·노쇼·날짜 변경은 환불 불가 ${S.o}</li>
+        <li><b>인원</b>: 온라인은 2~8인, 9인 이상은 전화 ${S.c}</li>
+        <li><b>이용 시간</b>: 주말·공휴일과 금요일 저녁은 1부/2부 (약 1시간 50분) ${S.o}</li>
+        <li><b>알레르기</b>는 예약할 때 미리 알려주세요 ${S.v}</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="q">✎</span><p><b>요청사항에 이렇게 남겨보세요</b>"${{anniv:'결혼기념일입니다',bday:'생일 식사입니다',parents:'부모님 생신(칠순) 식사입니다',gather:'가족 모임입니다'}[a.day]}${a.who==='kids'?', 아기의자 1개 부탁드립니다':''}${a.who==='elders'||a.day==='parents'?', 음식과 가까운 자리면 좋겠습니다':''}, 가능하면 창가 자리 부탁드립니다."</p></div>
+  </div>`;
+}
+
+function sectionCta(a){
+  const phoneFirst = a.who==='group' || a.day==='parents';
+  const tel = `<a class="btn ${phoneFirst?'gold':'line'}" href="${LINKS.tel}">전화 예약 02-317-0357 <small>${phoneFirst?'9인 이상·별실':''}</small></a>`;
+  return `
+  <div class="cta" id="g6">
+    <div class="card dark">
+      <span class="wordmark" style="font-size:22px">aria</span>
+      <h4 class="serif" style="color:#fff;font-size:19px;margin-top:6px">준비가 끝났다면, 예약하러 가볼까요?</h4>
+      <p class="muted">${promoOn?'10월 할인은 캐치테이블·네이버 예약의 사전결제 상품에서만 적용돼요.':'예약은 아래 채널 중 편한 곳에서 할 수 있어요.'}</p>
+      ${phoneFirst?tel:''}
+      <a class="btn ${phoneFirst?'line':'gold'}" href="${LINKS.catch}" target="_blank" rel="noopener">캐치테이블에서 예약 <small>할인가 확인</small></a>
+      <a class="btn line" href="${LINKS.naver}" target="_blank" rel="noopener">네이버 예약 <small>현장 결제도 가능</small></a>
+      ${phoneFirst?'':tel}
+      <a class="btn line" href="${LINKS.official}" target="_blank" rel="noopener">조선호텔 공식 예약</a>
+    </div>
+    <button class="btn line" id="share" style="margin-top:6px">이 가이드 링크 복사하기</button>
   </div>
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <div class="foot">
+    <b>정보 출처</b> (확인일 2026.10.19)<br>
+    공식: 조선호텔앤리조트 아리아 예약 페이지, 아리아 가을 메뉴 이벤트, 클럽조선 멤버십, 오시는 길 안내 · 2026.07.06 리뉴얼 보도자료<br>
+    캐치테이블·네이버: 아리아 매장 정보, 메뉴, 10월 프로모션, 방문자 리뷰<br>
+    후기: 팀 리뷰 분석 (네이버 블로그 기념일 방문 216건, 캐치테이블 기념일 리뷰 1,176건, 카카오맵 212건, 2026.10.17 수집)<br><br>
+    <b>이미지</b>: 웨스틴 조선 서울·메리어트 본보이·신세계그룹 뉴스룸(웨스틴 조선 서울 제공)·캐치테이블 업체 사진, 입구 사진은 팀 자료<br><br>
+    KNDA 고객경험 워크숍 7조 프로토타입이에요. 실제 웨스틴 조선 서울의 서비스가 아니며, 가격과 혜택은 바뀔 수 있으니 예약 전에 각 채널에서 다시 확인해 주세요.
+  </div>`;
+}
+
+function renderResult(){
+  const a = A;
+  $('#rph').style.backgroundImage = `url(${a.who==='couple'?'img-window.jpg':a.who==='kids'?'img-dessert.jpg':a.who==='group'?'img-asian.jpg':'img-hall.jpg'})`;
+  $('#rchips').innerHTML = ['day','who','go'].map(k=>`<span class="chip">${LABEL[k][a[k]]}</span>`).join('');
+  $('#rtitle').innerHTML = titleFor(a);
+  $('#rlead').textContent = '흩어진 공식 정보와 실제 방문 후기에서, 오늘에 필요한 것만 골랐어요.';
+  $('#rbody').innerHTML = sectionGlance(a)+sectionDiscount(a)+sectionSeason(a)+sectionWay(a)+sectionExtra(a)+sectionCheck(a)+sectionCta(a);
+  show('s-r');
+  const url = new URL(location.href); url.search = `?d=${a.day}&w=${a.who}&g=${a.go}`; url.hash='';
+  history.replaceState(null,'',url);
+  $('#share').onclick = async()=>{ try{ await navigator.clipboard.writeText(url.toString()); toast('링크를 복사했어요'); }catch(e){ toast(url.toString()); } };
+  setupNav();
+}
+
+function setupNav(){
+  const links=[...document.querySelectorAll('#nav a')];
+  links.forEach(l=>l.onclick=(e)=>{ e.preventDefault(); document.querySelector(l.getAttribute('href')).scrollIntoView({behavior:'smooth'}); });
+  const io = new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){ links.forEach(l=>l.classList.toggle('on', l.getAttribute('href')==='#'+en.target.id)); const on=links.find(l=>l.classList.contains('on')); if(on){ const nv=document.getElementById('nav'); nv.scrollTo({left:on.offsetLeft-nv.clientWidth/2+on.clientWidth/2,behavior:'smooth'}); } } }); },{rootMargin:'-45% 0px -50% 0px'});
+  ['g0','g1','g2','g3','g4','g5','g6'].forEach(id=>{ const el=document.getElementById(id); el&&io.observe(el); });
+}
+
+$('#start').onclick=()=>{ qi=0; A={}; renderQ(); show('s-q'); };
+$('#qback').onclick=()=>{ if(qi>0){ qi--; renderQ(); } else show('s-land'); };
+$('#redo').onclick=()=>{ qi=0; renderQ(); show('s-q'); history.replaceState(null,'',location.pathname); };
+
+/* 공유 링크로 들어오면 바로 결과 */
+(function(){
+  const p=new URLSearchParams(location.search); const d=p.get('d'),w=p.get('w'),g=p.get('g');
+  if(LABEL.day[d]&&LABEL.who[w]&&LABEL.go[g]){ A={day:d,who:w,go:g}; renderResult(); }
+})();
+</script>
 </body>
 </html>
